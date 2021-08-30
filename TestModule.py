@@ -1,7 +1,5 @@
 '''
-Created on Aug 21, 2021
-
-@author: Mrmon
+@author: Nicholas Buckley
 '''
 # -*- encoding: UTF-8 -*-
 
