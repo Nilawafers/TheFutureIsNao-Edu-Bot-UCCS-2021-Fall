@@ -1,7 +1,7 @@
 '''
 Created on Aug 21, 2021
 
-@author: Mrmon
+Unrefined testing for first iteration
 '''
 # -*- encoding: UTF-8 -*-
 
