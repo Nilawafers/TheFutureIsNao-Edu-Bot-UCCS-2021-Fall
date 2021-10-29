@@ -5,7 +5,7 @@ Testing program for Nao Senior design Worksheet Capture module
 
 # This is just an example script that shows how images can be accessed
 # through ALVideoDevice in python.
-
+# name of project as prefix to function names
 
 
 import sys
@@ -16,6 +16,8 @@ import math
 from PIL import Image
 
 from naoqi import ALProxy
+class var:
+    K = 0
 
 
 def showNaoImage(IP, PORT):
@@ -56,8 +58,10 @@ def showNaoImage(IP, PORT):
   # Create a PIL Image from our pixel array.
   im = Image.frombytes("RGB", (imageWidth, imageHeight), array)
   # changed to bytes
-  # Save the image.
-  im.save("camImage.png", "PNG")
+  # Save the image.\
+  image_name= "NaoPage1TestImage" + str(var.K) + ".png"
+  im.save(image_name, "PNG")
+  var.K+=1
 
   im.show()
   return im
@@ -137,7 +141,7 @@ def SimplePaperLocation(markData):
 
 
 if __name__ == '__main__':
-  IP = "169.254.35.20"  # Replace here with your NaoQi's IP address.
+  IP = "169.254.195.214"  # Replace here with your NaoQi's IP address.
   PORT = 9559
 
   # Read IP address from first argument if any.
@@ -191,10 +195,7 @@ if __name__ == '__main__':
    # [00.0,  00.0,  00.0], # target 8
     ]
 
-    # wbSetEffectorControl is a non blocking function
-    # time.sleep allow head go to his target
-    # The recommended minimum period between two successives set commands is
-    # 0.2 s.
+
   for targetCoordinate in targetCoordinateList:
       targetCoordinate = [target*math.pi/180.0 for target in targetCoordinate]
       motionProxy.wbSetEffectorControl(effectorName, targetCoordinate)
@@ -207,8 +208,10 @@ if __name__ == '__main__':
   
   textProxy.say("Hold you paper up as instructed on the back, and say cheese for your picture!")
   time.sleep(3.0)
+  seen = 0
   
-  while (allSee != 296):
+  while(seen < 21):
+  #while (allSee != 296):
       #textProxy.say("test")
       
       # Get data from landmark detection (assuming face detection has been activated).
@@ -218,24 +221,28 @@ if __name__ == '__main__':
       
       try:
           allSee = data[1][0][1][0] + data[1][1][1][0] + data[1][2][1][0] + data[1][3][1][0]
-          
+          print(sayCount)
+
       except Exception, e:
           print("Not all seen...")
-          sayCount+= 1
+          sayCount += 1
           #Getting marks location array [TopL, TopR, BotL, BotR]
-          if sayCount%1000:
+          if sayCount%1000 == 0:
               notSeen = "I can't see the"
               notSeen += SimplePaperLocation(data) + " Nao landmarks try adjusting!"
               textProxy.say(notSeen)
+
           
       
       if allSee == 296: #read all the marks on the page
           naoPaper = showNaoImage(IP, PORT)
+          allSee = 0
+          seen = seen + 1
       
 
 
   # Deactivate Head tracking and activate movement
-  #postureProxy.goToPosture("Stand", 0.5)
+  postureProxy.goToPosture("Stand", 0.5)
   isEnabled    = False
   motionProxy.wbEnableEffectorControl(effectorName, isEnabled)
 
