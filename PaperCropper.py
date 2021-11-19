@@ -26,11 +26,6 @@ import cntk
 
 
 
-
-
-
-
-
 #cut page into 5 levels based on the height of the page then sort left to right
 def sort_Reading_Order(contour, cols, height):
     tolerance_factor = height/5.2 #5 levels on the page since 5 problems
@@ -411,12 +406,19 @@ for p in range(21):
             probIndex += 5
         
         else:
-            outputAnsPred[i].append(rawPredictions[probIndex+2])
+            outputAnsPred[i].append(rawPredictions[probIndex+2:probIndex+3])
             probIndex += 4
             
         
     print(outputProbPred)
-    print(outputAnsPred)
+    
+    final_ans_pred =[]
+    for ans in outputAnsPred:
+            if len(ans[0]) > 1:
+                final_ans_pred.append( int( str(ans[0][0]) +  str(ans[0][1])))
+            else:
+                final_ans_pred.append(int(ans[0][0]))
+    print(final_ans_pred)
     print(AnsFromProb)
     
     
@@ -497,12 +499,18 @@ for p in range(21):
             probIndex += 5
         
         else:
-            outputAnsPred[i].append(rawPredictions[probIndex+2])
+            outputAnsPred[i].append(rawPredictions[probIndex+2:probIndex+3])
             probIndex += 4
             
         
     print(outputProbPred)
-    print(outputAnsPred)
+    final_ans_pred =[]
+    for ans in outputAnsPred:
+            if len(ans[0]) > 1:
+                final_ans_pred.append( int( str(ans[0][0]) +  str(ans[0][1])))
+            else:
+                final_ans_pred.append(int(ans[0][0]))
+    print(final_ans_pred)
     print(AnsFromProb)
 
 #print("OVERALL ACC:" ,TOTALACC/21)
